@@ -10,19 +10,24 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WindowsExplorer;
 
 namespace Test
 {
     /// <summary>
-    /// MainWindow.xaml の相互作用ロジック
+    /// Window1.xaml の相互作用ロジック
     /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void PathView_Selected(object sender, SelectedEventArgs e)
+        {
+            Console.WriteLine($"Select {((Product)((FrameworkElement)e.Item).DataContext).Name}");
         }
     }
 }

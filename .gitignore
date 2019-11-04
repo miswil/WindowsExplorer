@@ -5,3 +5,5 @@
 /.vs/WindowsExplorer/v16
 /WindowsExplorer/obj/Debug
 /Test/obj/Debug
+/Test/bin/Debug
+/WindowsExplorer/bin/Debug
