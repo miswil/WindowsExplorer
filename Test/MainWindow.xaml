@@ -5,8 +5,38 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Test"
         mc:Ignorable="d"
+        xmlns:we="clr-namespace:WindowsExplorer;assembly=WindowsExplorer"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+    <Window.DataContext>
+        <local:MainViewModel/>
+    </Window.DataContext>
+    <ListView ItemsSource="{Binding Products}" 
+              Margin="30" 
+              we:ListViewBehavior.DragMultiSelectEnabled="True"
+              we:ListViewBehavior.WindowsExplorerMode="true"
+              VirtualizingPanel.ScrollUnit="Pixel">
+        <ListView.View>
+            <GridView>
+                <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
+                <GridViewColumn Header="Weight" DisplayMemberBinding="{Binding Weight}"/>
+            </GridView>
+        </ListView.View>
+        <ListView.ItemsPanel>
+            <ItemsPanelTemplate>
+                <VirtualizingStackPanel/>
+                <!--<WrapPanel MaxWidth="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=ListView}}"/>-->
+            </ItemsPanelTemplate>
+        </ListView.ItemsPanel>
+        <!--<ListView.ItemContainerStyle>
+            <Style TargetType="ListViewItem">
+                <Setter Property="ContentTemplate">
+                    <Setter.Value>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ListView.ItemContainerStyle>-->
+    </ListView>
 </Window>

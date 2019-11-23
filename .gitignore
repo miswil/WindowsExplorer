@@ -5,3 +5,9 @@
 /.vs/WindowsExplorer/v16
 /WindowsExplorer/obj/Debug
 /Test/obj/Debug
+/Test/bin/Debug
+/WindowsExplorer/bin/Debug
+/Test/bin/Release
+/Test/obj/Release
+/WindowsExplorer/bin/Release
+/WindowsExplorer/obj/Release
