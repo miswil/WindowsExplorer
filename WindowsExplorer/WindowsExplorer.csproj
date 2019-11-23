@@ -69,6 +69,8 @@
     <Compile Include="PathView.cs" />
     <Compile Include="PathViewItem.cs" />
     <Compile Include="PathViewItemChildItem.cs" />
+    <Compile Include="ListViewBehavior.cs" />
+    <Compile Include="ListViewDragSelectAdorner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
