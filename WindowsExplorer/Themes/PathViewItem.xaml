@@ -11,7 +11,7 @@
     <VisualStateGroup x:Key="PathViewItemCommonVisualStateGroup" x:Name="CommonStates">
         <VisualState x:Name="Normal">
             <VisualState.Storyboard>
-                <Storyboard>                                                                                                                  
+                <Storyboard>
                     <ColorAnimation Duration="0" To="Transparent" Storyboard.TargetName="PART_PathButton" Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"/>
                     <ColorAnimation Duration="0" To="Transparent" Storyboard.TargetName="PART_PathButton" Storyboard.TargetProperty="(Button.BorderBrush).(SolidColorBrush.Color)"/>
                     <ColorAnimation Duration="0" To="Transparent" Storyboard.TargetName="PART_ExpandToggleButton" Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"/>
@@ -116,20 +116,17 @@
                     Style="{TemplateBinding PathItemContainerStyle}"
                     Content="{TemplateBinding Header}"
                     Template="{StaticResource PathButtonTemplate}"/>
-            <DockPanel Grid.Column="1"
-                       LastChildFill="True">
-                <ToggleButton Name="PART_ExpandToggleButton"
+            <ToggleButton Name="PART_ExpandToggleButton"
                               Style="{TemplateBinding PathItemChildItemContainerStyle}"
                               IsThreeState="False"
                               Template="{StaticResource ExpandToggleButtonTemplate}"/>
-                <Popup Name="PART_Popup"
+            <Popup Name="PART_Popup"
                        PlacementTarget="{Binding .,ElementName= PART_ExpandToggleButton}"
                        Placement="Bottom"
                        HorizontalOffset="-30"
                        IsOpen="{Binding (ToggleButton.IsChecked), ElementName=PART_ExpandToggleButton}">
-                    <ItemsPresenter/>
-                </Popup>
-            </DockPanel>
+                <ItemsPresenter/>
+            </Popup>
         </StackPanel>
     </ControlTemplate>
     <Style TargetType="{x:Type local:PathViewItem}">
