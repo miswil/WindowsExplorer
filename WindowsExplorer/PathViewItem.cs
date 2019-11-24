@@ -70,6 +70,29 @@ namespace WindowsExplorer
             }));
         #endregion IsExpanded
 
+        #region PathItemContainerStyleProperty
+        public Style PathItemContainerStyle
+        {
+            get { return (Style)GetValue(PathItemContainerStyleProperty); }
+            set { SetValue(PathItemContainerStyleProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for PathItemContainerStyle.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PathItemContainerStyleProperty =
+            DependencyProperty.Register("PathItemContainerStyle", typeof(Style), typeof(PathViewItem), new PropertyMetadata(null));
+        #endregion PathItemContainerStyleProperty
+
+        #region PathItemChildItemContainerStyleProperty
+        public Style PathItemChildItemContainerStyle
+        {
+            get { return (Style)GetValue(PathItemChildItemContainerStyleProperty); }
+            set { SetValue(PathItemChildItemContainerStyleProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for PathItemChildItemContainerStyle.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PathItemChildItemContainerStyleProperty =
+            DependencyProperty.Register("PathItemChildItemContainerStyle", typeof(Style), typeof(PathViewItem), new PropertyMetadata(null));
+        #endregion PathItemChildItemContainerStyleProperty
         #endregion Properties
 
         #region Events

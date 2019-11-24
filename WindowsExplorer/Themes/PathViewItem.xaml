@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:WindowsExplorer">
     <!--region Color Definitions-->
+    <Color x:Key="ItemNormalColor">White</Color>
     <Color x:Key="ItemMouseOverColor">#FFE5F3FF</Color>
     <Color x:Key="ItemMouseOverBorderColor">#FFCCE8FF</Color>
     <Color x:Key="ItemFocusedColor">#FFCCE8FF</Color>
@@ -10,7 +11,7 @@
     <VisualStateGroup x:Key="PathViewItemCommonVisualStateGroup" x:Name="CommonStates">
         <VisualState x:Name="Normal">
             <VisualState.Storyboard>
-                <Storyboard>
+                <Storyboard>                                                                                                                  
                     <ColorAnimation Duration="0" To="Transparent" Storyboard.TargetName="PART_PathButton" Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"/>
                     <ColorAnimation Duration="0" To="Transparent" Storyboard.TargetName="PART_PathButton" Storyboard.TargetProperty="(Button.BorderBrush).(SolidColorBrush.Color)"/>
                     <ColorAnimation Duration="0" To="Transparent" Storyboard.TargetName="PART_ExpandToggleButton" Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"/>
@@ -43,11 +44,23 @@
         <Border Background="{TemplateBinding Background}"
                 BorderThickness="{TemplateBinding BorderThickness}"
                 BorderBrush="{TemplateBinding BorderBrush}">
-            <ContentPresenter Style="{Binding ItemContainerStyle, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:PathView}}}"
-                              ContentTemplate="{Binding HeaderTemplate, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:PathViewItem}}}"
+            <ContentPresenter ContentTemplate="{Binding HeaderTemplate, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:PathViewItem}}}"
                               ContentTemplateSelector="{Binding HeaderTemplateSelector, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:PathViewItem}}}"/>
         </Border>
     </ControlTemplate>
+    <Style x:Key="PathButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background">
+            <Setter.Value>
+                <SolidColorBrush Color="{StaticResource ItemNormalColor}"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush">
+            <Setter.Value>
+                <SolidColorBrush Color="{StaticResource ItemNormalColor}"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <ControlTemplate x:Key="ExpandToggleButtonTemplate" TargetType="ToggleButton">
         <Border Background="{TemplateBinding Background}"
                 BorderThickness="{TemplateBinding BorderThickness}"
@@ -81,6 +94,19 @@
             </VisualStateManager.VisualStateGroups>
         </Border>
     </ControlTemplate>
+    <Style x:Key="ExpandToggleButtonStyle" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Background">
+            <Setter.Value>
+                <SolidColorBrush Color="{StaticResource ItemNormalColor}"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush">
+            <Setter.Value>
+                <SolidColorBrush Color="{StaticResource ItemNormalColor}"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <ControlTemplate x:Key="PathViewItemDefaultTemplate" TargetType="{x:Type local:PathViewItem}">                    <!--<ThicknessAnimation Duration="0" To="1" Storyboard.TargetName="PART_ExpandToggleButton" Storyboard.TargetProperty="BorderThickness"/>-->
         <Grid VerticalAlignment="Center">
             <VisualStateManager.VisualStateGroups>
@@ -91,19 +117,15 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Button x:Name="PART_PathButton"
-                    BorderThickness="{TemplateBinding BorderThickness}"
-                    BorderBrush="{TemplateBinding BorderBrush}"
+                    Style="{TemplateBinding PathItemContainerStyle}"
                     Content="{TemplateBinding Header}"
-                    Background="Transparent"
                     Template="{StaticResource PathButtonTemplate}"/>
             <DockPanel Grid.Column="1"
                        LastChildFill="True">
                 <ToggleButton Name="PART_ExpandToggleButton"
-                              BorderThickness="{TemplateBinding BorderThickness}"
-                              BorderBrush="{TemplateBinding BorderBrush}"
+                              Style="{TemplateBinding PathItemChildItemContainerStyle}"
                               IsThreeState="False"
-                              Template="{StaticResource ExpandToggleButtonTemplate}"
-                              Background="Transparent"/>
+                              Template="{StaticResource ExpandToggleButtonTemplate}"/>
                 <Popup Name="PART_Popup"
                        PlacementTarget="{Binding .,ElementName= PART_ExpandToggleButton}"
                        Placement="Bottom"
@@ -118,7 +140,8 @@
         <Setter Property="Template" Value="{StaticResource PathViewItemDefaultTemplate}"/>
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="UseLayoutRounding" Value="True"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="PathItemContainerStyle" Value="{StaticResource PathButtonStyle}"/>
+        <Setter Property="PathItemChildItemContainerStyle" Value="{StaticResource ExpandToggleButtonStyle}"/>
+        <Setter Property="ItemContainerStyle" Value="{x:Null}"/>
     </Style>
 </ResourceDictionary>
