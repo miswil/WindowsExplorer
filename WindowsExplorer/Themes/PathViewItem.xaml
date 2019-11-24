@@ -108,14 +108,10 @@
         </Setter>
     </Style>
     <ControlTemplate x:Key="PathViewItemDefaultTemplate" TargetType="{x:Type local:PathViewItem}">                    <!--<ThicknessAnimation Duration="0" To="1" Storyboard.TargetName="PART_ExpandToggleButton" Storyboard.TargetProperty="BorderThickness"/>-->
-        <Grid VerticalAlignment="Center">
+        <StackPanel Orientation="Horizontal">
             <VisualStateManager.VisualStateGroups>
                 <StaticResource ResourceKey="PathViewItemCommonVisualStateGroup"/>
             </VisualStateManager.VisualStateGroups>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
             <Button x:Name="PART_PathButton"
                     Style="{TemplateBinding PathItemContainerStyle}"
                     Content="{TemplateBinding Header}"
@@ -134,7 +130,7 @@
                     <ItemsPresenter/>
                 </Popup>
             </DockPanel>
-        </Grid>
+        </StackPanel>
     </ControlTemplate>
     <Style TargetType="{x:Type local:PathViewItem}">
         <Setter Property="Template" Value="{StaticResource PathViewItemDefaultTemplate}"/>
