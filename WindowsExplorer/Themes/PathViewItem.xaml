@@ -84,7 +84,7 @@
             </VisualStateManager.VisualStateGroups>
         </Border>
     </ControlTemplate>
-    <ControlTemplate x:Key="PathViewItemDefaultTemplate" TargetType="{x:Type local:PathViewItem}">
+    <ControlTemplate x:Key="PathViewItemDefaultTemplate" TargetType="{x:Type local:PathViewItem}">                    <!--<ThicknessAnimation Duration="0" To="1" Storyboard.TargetName="PART_ExpandToggleButton" Storyboard.TargetProperty="BorderThickness"/>-->
         <Grid VerticalAlignment="Center">
             <VisualStateManager.VisualStateGroups>
                 <StaticResource ResourceKey="PathViewItemCommonVisualStateGroup"/>
@@ -94,17 +94,19 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Button x:Name="PART_PathButton"
-                    BorderThickness="0"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
                     Content="{TemplateBinding Header}"
                     Background="Transparent"
                     Template="{StaticResource PathButtonTemplate}"/>
             <DockPanel Grid.Column="1"
                        LastChildFill="True">
                 <ToggleButton Name="PART_ExpandToggleButton"
+                              BorderThickness="{TemplateBinding BorderThickness}"
+                              BorderBrush="{TemplateBinding BorderBrush}"
                               IsThreeState="False"
                               Template="{StaticResource ExpandToggleButtonTemplate}"
-                              Background="Transparent"
-                              BorderThickness="0"/>
+                              Background="Transparent"/>
                 <Popup Name="PART_Popup"
                        PlacementTarget="{Binding .,ElementName= PART_ExpandToggleButton}"
                        Placement="Bottom"
@@ -119,5 +121,7 @@
         <Setter Property="Template" Value="{StaticResource PathViewItemDefaultTemplate}"/>
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="UseLayoutRounding" Value="True"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
     </Style>
 </ResourceDictionary>
