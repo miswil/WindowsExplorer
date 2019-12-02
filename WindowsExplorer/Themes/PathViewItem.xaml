@@ -18,24 +18,20 @@
             </Storyboard>
         </VisualState>
         <VisualState x:Name="MouseOver">
-            <VisualState.Storyboard>
-                <Storyboard>
-                    <ColorAnimation Duration="0" To="{StaticResource ItemMouseOverColor}" Storyboard.TargetName="PART_PathButton" Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"/>
-                    <ColorAnimation Duration="0" To="{StaticResource ItemMouseOverBorderColor}" Storyboard.TargetName="PART_PathButton" Storyboard.TargetProperty="(Button.BorderBrush).(SolidColorBrush.Color)"/>
-                    <ColorAnimation Duration="0" To="{StaticResource ItemMouseOverColor}" Storyboard.TargetName="PART_ExpandToggleButton" Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"/>
-                    <ColorAnimation Duration="0" To="{StaticResource ItemMouseOverBorderColor}" Storyboard.TargetName="PART_ExpandToggleButton" Storyboard.TargetProperty="(Button.BorderBrush).(SolidColorBrush.Color)"/>
-                </Storyboard>
-            </VisualState.Storyboard>
+            <Storyboard>
+                <ColorAnimation Duration="0" To="{StaticResource ItemMouseOverColor}" Storyboard.TargetName="PART_PathButton" Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"/>
+                <ColorAnimation Duration="0" To="{StaticResource ItemMouseOverBorderColor}" Storyboard.TargetName="PART_PathButton" Storyboard.TargetProperty="(Button.BorderBrush).(SolidColorBrush.Color)"/>
+                <ColorAnimation Duration="0" To="{StaticResource ItemMouseOverColor}" Storyboard.TargetName="PART_ExpandToggleButton" Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"/>
+                <ColorAnimation Duration="0" To="{StaticResource ItemMouseOverBorderColor}" Storyboard.TargetName="PART_ExpandToggleButton" Storyboard.TargetProperty="(Button.BorderBrush).(SolidColorBrush.Color)"/>
+            </Storyboard>
         </VisualState>
         <VisualState x:Name="Expand">
-            <VisualState.Storyboard>
-                <Storyboard>
-                    <ColorAnimation Duration="0" To="{StaticResource ItemFocusedColor}" Storyboard.TargetName="PART_PathButton" Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"/>
-                    <ColorAnimation Duration="0" To="{StaticResource ItemFocusedBorderColor}" Storyboard.TargetName="PART_PathButton" Storyboard.TargetProperty="(Button.BorderBrush).(SolidColorBrush.Color)"/>
-                    <ColorAnimation Duration="0" To="{StaticResource ItemFocusedColor}" Storyboard.TargetName="PART_ExpandToggleButton" Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"/>
-                    <ColorAnimation Duration="0" To="{StaticResource ItemFocusedBorderColor}" Storyboard.TargetName="PART_ExpandToggleButton" Storyboard.TargetProperty="(Button.BorderBrush).(SolidColorBrush.Color)"/>
-                </Storyboard>
-            </VisualState.Storyboard>
+            <Storyboard>
+                <ColorAnimation Duration="0" To="{StaticResource ItemFocusedColor}" Storyboard.TargetName="PART_PathButton" Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"/>
+                <ColorAnimation Duration="0" To="{StaticResource ItemFocusedBorderColor}" Storyboard.TargetName="PART_PathButton" Storyboard.TargetProperty="(Button.BorderBrush).(SolidColorBrush.Color)"/>
+                <ColorAnimation Duration="0" To="{StaticResource ItemFocusedColor}" Storyboard.TargetName="PART_ExpandToggleButton" Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"/>
+                <ColorAnimation Duration="0" To="{StaticResource ItemFocusedBorderColor}" Storyboard.TargetName="PART_ExpandToggleButton" Storyboard.TargetProperty="(Button.BorderBrush).(SolidColorBrush.Color)"/>
+            </Storyboard>
         </VisualState>
     </VisualStateGroup>
     <ControlTemplate x:Key="PathButtonTemplate" TargetType="{x:Type Button}">
