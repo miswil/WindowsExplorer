@@ -138,7 +138,6 @@ namespace WindowsExplorer
                         this.expandingItem.IsExpanded = false;
                     }
                     item.IsExpanded = true;
-                    this.expandingItem = item;
                     Keyboard.Focus(item);
                     break;
                 case PathViewState.Editing:
