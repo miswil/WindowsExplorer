@@ -18,24 +18,20 @@
             </Storyboard>
         </VisualState>
         <VisualState x:Name="MouseOver">
-            <VisualState.Storyboard>
-                <Storyboard>
-                    <ColorAnimation Duration="0" To="{StaticResource ItemMouseOverColor}" Storyboard.TargetName="PART_PathButton" Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"/>
-                    <ColorAnimation Duration="0" To="{StaticResource ItemMouseOverBorderColor}" Storyboard.TargetName="PART_PathButton" Storyboard.TargetProperty="(Button.BorderBrush).(SolidColorBrush.Color)"/>
-                    <ColorAnimation Duration="0" To="{StaticResource ItemMouseOverColor}" Storyboard.TargetName="PART_ExpandToggleButton" Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"/>
-                    <ColorAnimation Duration="0" To="{StaticResource ItemMouseOverBorderColor}" Storyboard.TargetName="PART_ExpandToggleButton" Storyboard.TargetProperty="(Button.BorderBrush).(SolidColorBrush.Color)"/>
-                </Storyboard>
-            </VisualState.Storyboard>
+            <Storyboard>
+                <ColorAnimation Duration="0" To="{StaticResource ItemMouseOverColor}" Storyboard.TargetName="PART_PathButton" Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"/>
+                <ColorAnimation Duration="0" To="{StaticResource ItemMouseOverBorderColor}" Storyboard.TargetName="PART_PathButton" Storyboard.TargetProperty="(Button.BorderBrush).(SolidColorBrush.Color)"/>
+                <ColorAnimation Duration="0" To="{StaticResource ItemMouseOverColor}" Storyboard.TargetName="PART_ExpandToggleButton" Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"/>
+                <ColorAnimation Duration="0" To="{StaticResource ItemMouseOverBorderColor}" Storyboard.TargetName="PART_ExpandToggleButton" Storyboard.TargetProperty="(Button.BorderBrush).(SolidColorBrush.Color)"/>
+            </Storyboard>
         </VisualState>
         <VisualState x:Name="Expand">
-            <VisualState.Storyboard>
-                <Storyboard>
-                    <ColorAnimation Duration="0" To="{StaticResource ItemFocusedColor}" Storyboard.TargetName="PART_PathButton" Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"/>
-                    <ColorAnimation Duration="0" To="{StaticResource ItemFocusedBorderColor}" Storyboard.TargetName="PART_PathButton" Storyboard.TargetProperty="(Button.BorderBrush).(SolidColorBrush.Color)"/>
-                    <ColorAnimation Duration="0" To="{StaticResource ItemFocusedColor}" Storyboard.TargetName="PART_ExpandToggleButton" Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"/>
-                    <ColorAnimation Duration="0" To="{StaticResource ItemFocusedBorderColor}" Storyboard.TargetName="PART_ExpandToggleButton" Storyboard.TargetProperty="(Button.BorderBrush).(SolidColorBrush.Color)"/>
-                </Storyboard>
-            </VisualState.Storyboard>
+            <Storyboard>
+                <ColorAnimation Duration="0" To="{StaticResource ItemFocusedColor}" Storyboard.TargetName="PART_PathButton" Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"/>
+                <ColorAnimation Duration="0" To="{StaticResource ItemFocusedBorderColor}" Storyboard.TargetName="PART_PathButton" Storyboard.TargetProperty="(Button.BorderBrush).(SolidColorBrush.Color)"/>
+                <ColorAnimation Duration="0" To="{StaticResource ItemFocusedColor}" Storyboard.TargetName="PART_ExpandToggleButton" Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"/>
+                <ColorAnimation Duration="0" To="{StaticResource ItemFocusedBorderColor}" Storyboard.TargetName="PART_ExpandToggleButton" Storyboard.TargetProperty="(Button.BorderBrush).(SolidColorBrush.Color)"/>
+            </Storyboard>
         </VisualState>
     </VisualStateGroup>
     <ControlTemplate x:Key="PathButtonTemplate" TargetType="{x:Type Button}">
@@ -106,33 +102,26 @@
         </Setter>
     </Style>
     <ControlTemplate x:Key="PathViewItemDefaultTemplate" TargetType="{x:Type local:PathViewItem}">                    <!--<ThicknessAnimation Duration="0" To="1" Storyboard.TargetName="PART_ExpandToggleButton" Storyboard.TargetProperty="BorderThickness"/>-->
-        <Grid VerticalAlignment="Center">
+        <StackPanel Orientation="Horizontal">
             <VisualStateManager.VisualStateGroups>
                 <StaticResource ResourceKey="PathViewItemCommonVisualStateGroup"/>
             </VisualStateManager.VisualStateGroups>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
             <Button x:Name="PART_PathButton"
                     Style="{TemplateBinding PathItemContainerStyle}"
                     Content="{TemplateBinding Header}"
                     Template="{StaticResource PathButtonTemplate}"/>
-            <DockPanel Grid.Column="1"
-                       LastChildFill="True">
-                <ToggleButton Name="PART_ExpandToggleButton"
+            <ToggleButton Name="PART_ExpandToggleButton"
                               Style="{TemplateBinding PathItemChildItemContainerStyle}"
                               IsThreeState="False"
                               Template="{StaticResource ExpandToggleButtonTemplate}"/>
-                <Popup Name="PART_Popup"
+            <Popup Name="PART_Popup"
                        PlacementTarget="{Binding .,ElementName= PART_ExpandToggleButton}"
                        Placement="Bottom"
                        HorizontalOffset="-30"
                        IsOpen="{Binding (ToggleButton.IsChecked), ElementName=PART_ExpandToggleButton}">
-                    <ItemsPresenter/>
-                </Popup>
-            </DockPanel>
-        </Grid>
+                <ItemsPresenter/>
+            </Popup>
+        </StackPanel>
     </ControlTemplate>
     <Style TargetType="{x:Type local:PathViewItem}">
         <Setter Property="Template" Value="{StaticResource PathViewItemDefaultTemplate}"/>
