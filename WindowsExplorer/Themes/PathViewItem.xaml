@@ -9,7 +9,14 @@
     <Color x:Key="ItemFocusedBorderColor">#FF99D1FF</Color>
     <!--endregion-->
     <VisualStateGroup x:Key="PathViewItemCommonVisualStateGroup" x:Name="CommonStates">
-        <VisualState x:Name="Normal"/>
+        <VisualState x:Name="Normal">
+            <Storyboard>
+                <ColorAnimation Duration="0" Storyboard.TargetName="PART_PathButton" Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"/>
+                <ColorAnimation Duration="0" Storyboard.TargetName="PART_PathButton" Storyboard.TargetProperty="(Button.BorderBrush).(SolidColorBrush.Color)"/>
+                <ColorAnimation Duration="0" Storyboard.TargetName="PART_ExpandToggleButton" Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"/>
+                <ColorAnimation Duration="0" Storyboard.TargetName="PART_ExpandToggleButton" Storyboard.TargetProperty="(Button.BorderBrush).(SolidColorBrush.Color)"/>
+            </Storyboard>
+        </VisualState>
         <VisualState x:Name="MouseOver">
             <VisualState.Storyboard>
                 <Storyboard>
