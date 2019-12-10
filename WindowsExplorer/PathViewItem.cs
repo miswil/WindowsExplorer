@@ -190,16 +190,19 @@ namespace WindowsExplorer
         private void PathButton_Click(object sender, RoutedEventArgs e)
         {
             this.RaiseEvent(new RoutedEventArgs(SelectedEvent, this));
+            e.Handled = true;
         }
 
         private void ExpandToggleButton_Unchecked(object sender, RoutedEventArgs e)
         {
             this.IsExpanded = false;
+            e.Handled = true;
         }
 
         private void ExpandToggleButton_Checked(object sender, RoutedEventArgs e)
         {
             this.IsExpanded = true;
+            e.Handled = true;
         }
 
         private void SetVisualState()
