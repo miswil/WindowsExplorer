@@ -101,7 +101,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <ControlTemplate x:Key="PathViewItemDefaultTemplate" TargetType="{x:Type local:PathViewItem}">                    <!--<ThicknessAnimation Duration="0" To="1" Storyboard.TargetName="PART_ExpandToggleButton" Storyboard.TargetProperty="BorderThickness"/>-->
+    <ControlTemplate x:Key="PathViewItemDefaultTemplate" TargetType="{x:Type local:PathViewItem}">
         <StackPanel Orientation="Horizontal">
             <VisualStateManager.VisualStateGroups>
                 <StaticResource ResourceKey="PathViewItemCommonVisualStateGroup"/>
