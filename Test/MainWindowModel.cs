@@ -10,5 +10,9 @@ namespace Test
     {
         public List<Product> Products { get; }
             = Enumerable.Range(0, 3).Select(i => new Product { ID = i, Name = $"Product{i}", Parts = Enumerable.Range(0, 20).Select(j => new Product { ID = j, Name = $"Part{j}" }).ToList() }).ToList();
+        public string Path { get; set; } = "Path0";
+
+        public List<string> Paths { get; }
+            = Enumerable.Range(0, 10).Select(i => $"Path{i}").ToList();
     }
 }

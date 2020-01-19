@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -37,6 +38,7 @@ namespace WindowsExplorer
     public class PathView : ItemsControl
     {
         private PathViewItem expandingItem = null;
+        private ComboBox pathComboBox = null;
         private TextBox pathTextBox = null;
         private string beforeEditPathText;
 
@@ -51,17 +53,34 @@ namespace WindowsExplorer
         public static readonly DependencyProperty StateProperty =
             DependencyProperty.Register("State", typeof(PathViewState), typeof(PathView), new PropertyMetadata(PathViewState.Normal));
 
-        public string PathText
+        public Style PathsStyle
         {
-            get { return (string)GetValue(PathTextProperty); }
-            set { SetValue(PathTextProperty, value); }
+            get { return (Style)GetValue(PathsStyleProperty); }
+            set { SetValue(PathsStyleProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for Path.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty PathTextProperty =
-            DependencyProperty.Register("PathText", typeof(string), typeof(PathView), new PropertyMetadata(null, PathTextPropertyChanged));
-        #endregion Property
+        public static readonly DependencyProperty PathsStyleProperty =
+            DependencyProperty.Register("PathsStyle", typeof(Style), typeof(PathView), new PropertyMetadata(null));
 
+        public string Path
+        {
+            get { return (string)GetValue(PathProperty); }
+            set { SetValue(PathProperty, value); }
+        }
+
+        public static readonly DependencyProperty PathProperty =
+            DependencyProperty.Register("Path", typeof(string), typeof(PathView), new PropertyMetadata(null));
+
+        public IEnumerable Paths
+        {
+            get { return (IEnumerable)GetValue(PathsProperty); }
+            set { SetValue(PathsProperty, value); }
+        }
+
+        public static readonly DependencyProperty PathsProperty =
+            DependencyProperty.Register("Paths", typeof(IEnumerable), typeof(PathView), new PropertyMetadata(null));
+        #endregion Property
         #region Events
         public delegate void SelectedEventHandler(object sender, SelectedEventArgs e);
 
@@ -75,16 +94,16 @@ namespace WindowsExplorer
             remove { RemoveHandler(SelectedEvent, value); }
         }
 
-        public delegate void PathTextChangedEventHandler(object sender, PathTextChangedEventArgs e);
+        public delegate void PathCommitEventHandler(object sender, PathTextCommitEventArgs e);
 
-        public static readonly RoutedEvent PathTextChangedEvent =
-            EventManager.RegisterRoutedEvent("PathTextChanged", RoutingStrategy.Bubble, typeof(PathTextChangedEventHandler), typeof(PathView));
+        public static readonly RoutedEvent PathCommitEvent =
+            EventManager.RegisterRoutedEvent("PathCommit", RoutingStrategy.Bubble, typeof(PathCommitEventHandler), typeof(PathView));
 
         // Provide CLR accessors for the event
-        public event PathTextChangedEventHandler PathTextChanged
+        public event PathCommitEventHandler PathCommit
         {
-            add { AddHandler(PathTextChangedEvent, value); }
-            remove { RemoveHandler(PathTextChangedEvent, value); }
+            add { AddHandler(PathCommitEvent, value); }
+            remove { RemoveHandler(PathCommitEvent, value); }
         }
         #endregion Events
 
@@ -93,19 +112,10 @@ namespace WindowsExplorer
             DefaultStyleKeyProperty.OverrideMetadata(typeof(PathView), new FrameworkPropertyMetadata(typeof(PathView)));
         }
 
-        private static void PathTextPropertyChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if ((sender as PathView).pathTextBox != null)
-            {
-                (sender as PathView).pathTextBox.Text = (string)e.NewValue;
-            }
-        }
-
         public PathView()
         {
             this.AddHandler(PathViewItemChildItem.SelectedEvent, new RoutedEventHandler(this.ItemSelected));
             this.AddHandler(PathViewItem.SelectedEvent, new RoutedEventHandler(this.ItemSelected));
-            this.AddHandler(Mouse.PreviewMouseDownOutsideCapturedElementEvent, (MouseButtonEventHandler)this.PathView_PreviewMouseDownOutside, true);
             this.MouseUp += this.PathView_MouseUp;
         }
 
@@ -113,19 +123,45 @@ namespace WindowsExplorer
         {
             base.OnApplyTemplate();
 
+            if (this.pathComboBox != null)
+            {
+                this.pathComboBox.RemoveHandler(Mouse.PreviewMouseDownOutsideCapturedElementEvent, (MouseButtonEventHandler)this.PathComboBox_PreviewMouseDownOutside);
+                this.pathComboBox.LostMouseCapture -= this.PathComboBox_LostMouseCapture;
+                this.pathComboBox.SelectionChanged -= this.PathComboBox_SelectionChanged;
+                this.pathComboBox.Unloaded -= this.PathComboBox_Unloaded;
+                this.pathComboBox.Loaded -= this.PathComboBox_Loaded;
+            }
+            this.pathComboBox = this.Template.FindName("PART_Paths", this) as ComboBox;
+            if (this.pathComboBox != null)
+            {
+                this.pathComboBox.Loaded += this.PathComboBox_Loaded;
+                this.pathComboBox.Unloaded += this.PathComboBox_Unloaded;
+                this.pathComboBox.SelectionChanged += this.PathComboBox_SelectionChanged;
+                this.pathComboBox.LostMouseCapture += this.PathComboBox_LostMouseCapture;
+                this.pathComboBox.AddHandler(Mouse.PreviewMouseDownOutsideCapturedElementEvent, (MouseButtonEventHandler)this.PathComboBox_PreviewMouseDownOutside);
+            }
+        }
+
+        private void PathComboBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            /*
+             * PART_EditableTextBos can be obtained after the combobox is loaded.
+             */
+            this.pathTextBox = this.pathComboBox?.Template.FindName("PART_EditableTextBox", this.pathComboBox) as TextBox;
+            if (this.pathTextBox != null)
+            {
+                this.pathTextBox.ContextMenu = GetEditableTextBoxContextMenu();
+                this.pathTextBox.KeyDown += this.PathTextBox_KeyDown;
+                this.pathTextBox.IsVisibleChanged += this.PathTextBox_IsVisibleChanged;
+            }
+        }
+
+        private void PathComboBox_Unloaded(object sender, RoutedEventArgs e)
+        {
             if (this.pathTextBox != null)
             {
                 this.pathTextBox.IsVisibleChanged -= this.PathTextBox_IsVisibleChanged;
-                this.pathTextBox.LostMouseCapture -= this.PathTextBox_LostMouseCapture;
                 this.pathTextBox.KeyDown -= this.PathTextBox_KeyDown;
-            }
-            this.pathTextBox = this.Template.FindName("PART_PathText", this) as TextBox;
-            if (this.pathTextBox != null)
-            {
-                this.pathTextBox.Text = this.PathText;
-                this.pathTextBox.KeyDown += this.PathTextBox_KeyDown;
-                this.pathTextBox.LostMouseCapture += this.PathTextBox_LostMouseCapture;
-                this.pathTextBox.IsVisibleChanged += this.PathTextBox_IsVisibleChanged;
             }
         }
 
@@ -205,7 +241,7 @@ namespace WindowsExplorer
         {
             this.RaiseEvent(new SelectedEventArgs(SelectedEvent, this)
             {
-                Item = e.OriginalSource,
+                Item = (e.OriginalSource as FrameworkElement)?.DataContext,
             });
             if (this.expandingItem != null)
             {
@@ -219,29 +255,40 @@ namespace WindowsExplorer
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void PathView_PreviewMouseDownOutside(object sender, MouseButtonEventArgs e)
+        private void PathComboBox_PreviewMouseDownOutside(object sender, MouseButtonEventArgs e)
         {
             if (this.State == PathViewState.Expanding)
             {
-                this.ReleaseMouseCapture();
-                this.expandingItem.IsExpanded = false;
+                this.pathComboBox.ReleaseMouseCapture();
             }
-            this.pathTextBox.Text = this.beforeEditPathText;
+            this.pathComboBox.Text = this.beforeEditPathText;
             this.SetVisualState(PathViewState.Normal);
         }
 
         /// <summary>
-        /// force mouse captured because textbox default behavior release the mouse capture when selecting the text in textbox with mouse drag/click.
-        /// But when user is opening a contextmenu, although mouse capture is lost from the textbox, not force the textbox to capture mouse to prevent showing context menu.
-        /// In order to get contextmenu IsOpen, ContextMenu is explicitly defined for the textbox.
+        /// Force mouse is re-captured when lost
+        /// because a textbox default behavior release the mouse capture
+        /// when the text in the textbox is selected with mouse drag/click.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void PathTextBox_LostMouseCapture(object sender, MouseEventArgs e)
+        private void PathComboBox_LostMouseCapture(object sender, MouseEventArgs e)
         {
-            if (!this.pathTextBox.ContextMenu.IsOpen)
+            /*
+             * Condition summary
+             * # Mouse.LeftButton == MouseButtonState.Pressed
+             *   When the text of textbox is selected with mouse drag/click, ComboBox mouse capture is lost.
+             *   On this situation, forcing the textbox to capture the mouse prevent selecting with mouse drag/click.
+             *   So this situation is exception of re-capture.
+             * # this.pathTextBox.ContextMenu.IsOpen
+             *   When user opened a contextmenu, mouse capture is lost from the textbox.
+             *   On this situation, forcing the textbox to capture the mouse prevent showing context menu.
+             *   So this situation is exception of re-capture.
+             *   (Caution) In order to get contextmenu 'IsOpen', ContextMenu is explicitly defined for the textbox.
+             */
+            if (Mouse.LeftButton != MouseButtonState.Pressed && !this.pathTextBox.ContextMenu.IsOpen)
             {
-                Mouse.Capture(this.pathTextBox, CaptureMode.SubTree);
+                Mouse.Capture(this.pathComboBox, CaptureMode.SubTree);
             }
         }
 
@@ -254,9 +301,17 @@ namespace WindowsExplorer
         {
             if ((bool)e.NewValue)
             {
-                this.pathTextBox.Focus();
-                this.pathTextBox.SelectAll();
-                Mouse.Capture(this.pathTextBox, CaptureMode.SubTree);
+                if (this.pathTextBox != null)
+                {
+                    this.pathTextBox.Focus();
+                    this.pathTextBox.SelectAll();
+                    /*
+                     * Don't capture mouse to pathTextBox.
+                     * Otherwise combobox expand buton becomes unusable
+                     * because it robs the mouse capture of textbox and the textbox re-capture the mouse.
+                     */
+                    Mouse.Capture(this.pathComboBox, CaptureMode.SubTree);
+                }
             }
         }
 
@@ -266,8 +321,24 @@ namespace WindowsExplorer
             {
                 this.expandingItem.IsExpanded = false;
             }
-            this.beforeEditPathText = this.pathTextBox.Text;
+            this.beforeEditPathText = this.pathComboBox.Text;
             this.SetVisualState(PathViewState.Editing);
+        }
+
+        private void PathComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if ((sender as ComboBox).IsDropDownOpen && e.AddedItems.Count != 0)
+            {
+                this.SetVisualState(PathViewState.Normal);
+                void pathTextChangedByComboBoxItemSelect(object _s, TextChangedEventArgs _e)
+                {
+                    this.pathTextBox.TextChanged -= pathTextChangedByComboBoxItemSelect;
+                    this.RaisePathTextCommitEvent();
+                }
+                // at this point, the text being shown is not the selected text.
+                // TextChanged event should be raised after text is actually changed.
+                this.pathTextBox.TextChanged += pathTextChangedByComboBoxItemSelect;
+            }
         }
 
         private void PathTextBox_KeyDown(object sender, KeyEventArgs e)
@@ -276,12 +347,11 @@ namespace WindowsExplorer
             {
                 case Key.Enter:
                     this.SetVisualState(PathViewState.Normal);
-                    this.PathText = this.pathTextBox.Text;
-                    this.RaiseEvent(new PathTextChangedEventArgs(PathTextChangedEvent) { OldText = this.beforeEditPathText, NewText = this.pathTextBox.Text });
+                    this.RaisePathTextCommitEvent();
                     break;
                 case Key.Escape:
                     this.SetVisualState(PathViewState.Normal);
-                    this.pathTextBox.Text = this.beforeEditPathText;
+                    this.pathComboBox.Text = this.beforeEditPathText;
                     break;
                 default:
                     break;
@@ -306,6 +376,20 @@ namespace WindowsExplorer
                     break;
             }
         }
+
+        private void RaisePathTextCommitEvent()
+        {
+            this.RaiseEvent(new PathTextCommitEventArgs(PathCommitEvent) { OldText = this.beforeEditPathText, NewText = this.pathTextBox.Text });
+        }
+
+        private ContextMenu GetEditableTextBoxContextMenu()
+        {
+            var contextMenu = new ContextMenu();
+            contextMenu.Items.Add(new MenuItem { Command = ApplicationCommands.Cut });
+            contextMenu.Items.Add(new MenuItem { Command = ApplicationCommands.Copy });
+            contextMenu.Items.Add(new MenuItem { Command = ApplicationCommands.Paste });
+            return contextMenu;
+        }
     }
 
     public class SelectedEventArgs : RoutedEventArgs
@@ -328,19 +412,19 @@ namespace WindowsExplorer
         public object Item { get; internal set; }
     }
 
-    public class PathTextChangedEventArgs : RoutedEventArgs
+    public class PathTextCommitEventArgs : RoutedEventArgs
     {
-        public PathTextChangedEventArgs() : base()
+        public PathTextCommitEventArgs() : base()
         {
 
         }
 
-        public PathTextChangedEventArgs(RoutedEvent routedEvent) : base(routedEvent)
+        public PathTextCommitEventArgs(RoutedEvent routedEvent) : base(routedEvent)
         {
 
         }
 
-        public PathTextChangedEventArgs(RoutedEvent routedEvent, object source) : base(routedEvent, source)
+        public PathTextCommitEventArgs(RoutedEvent routedEvent, object source) : base(routedEvent, source)
         {
 
         }
