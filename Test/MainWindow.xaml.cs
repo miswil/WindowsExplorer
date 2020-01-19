@@ -27,7 +27,19 @@ namespace Test
 
         private void PathView_Selected(object sender, SelectedEventArgs e)
         {
-            Console.WriteLine($"Select {((Product)((FrameworkElement)e.Item).DataContext).Name}");
+            if (e.Item is Product product)
+            {
+                Console.WriteLine($"Select {product.Name}");
+            }
+            else
+            {
+                Console.WriteLine($"Select {e.Item}");
+            }
+        }
+
+        private void PathView_PathCommit(object sender, PathTextCommitEventArgs e)
+        {
+            Console.WriteLine($"PathCommit: {e.OldText} -> {e.NewText}");
         }
     }
 }

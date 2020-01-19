@@ -15,7 +15,10 @@
         <we:PathView DockPanel.Dock="Top"
                      ItemsSource="{Binding Products}"
                      Selected="PathView_Selected"
-                     VerticalAlignment="Top">
+                     PathCommit="PathView_PathCommit"
+                     VerticalAlignment="Top"
+                     Path="{Binding Path}"
+                     Paths="{Binding Paths}">
             <we:PathView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Parts}">
                     <TextBlock>
