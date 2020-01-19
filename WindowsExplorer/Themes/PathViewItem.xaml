@@ -130,5 +130,6 @@
         <Setter Property="PathItemContainerStyle" Value="{StaticResource PathButtonStyle}"/>
         <Setter Property="PathItemChildItemContainerStyle" Value="{StaticResource ExpandToggleButtonStyle}"/>
         <Setter Property="ItemContainerStyle" Value="{x:Null}"/>
+        <Setter Property="IsTabStop" Value="False"/>
     </Style>
 </ResourceDictionary>
