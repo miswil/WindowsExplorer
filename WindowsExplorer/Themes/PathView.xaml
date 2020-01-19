@@ -52,5 +52,6 @@
         <Setter Property="BorderBrush" Value="Black"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="FocusManager.IsFocusScope" Value="True"/>
+        <Setter Property="IsTabStop" Value="False"/>
     </Style>
 </ResourceDictionary>
