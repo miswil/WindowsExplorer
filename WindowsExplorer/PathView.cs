@@ -317,12 +317,15 @@ namespace WindowsExplorer
 
         private void PathView_MouseUp(object sender, MouseButtonEventArgs e)
         {
+            if (this.State == PathViewState.Normal)
+            {
+                this.beforeEditPathText = this.pathComboBox.Text;
+                this.SetVisualState(PathViewState.Editing);
+            }
             if (this.expandingItem != null)
             {
                 this.expandingItem.IsExpanded = false;
             }
-            this.beforeEditPathText = this.pathComboBox.Text;
-            this.SetVisualState(PathViewState.Editing);
         }
 
         private void PathComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
