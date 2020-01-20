@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:WindowsExplorer">
+                    xmlns:local="clr-namespace:MeisterWill.WindowsExplorer">
     <!--region Color Definitions-->
     <Color x:Key="ItemNormalColor">White</Color>
     <Color x:Key="ItemMouseOverColor">#FFE5F3FF</Color>

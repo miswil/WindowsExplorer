@@ -7,7 +7,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
-namespace WindowsExplorer
+namespace MeisterWill.WindowsExplorer
 {
     public class ListViewDragSelectAdorner : Adorner
     {

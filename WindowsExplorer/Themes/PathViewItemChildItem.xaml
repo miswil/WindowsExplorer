@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:WindowsExplorer">
+                    xmlns:local="clr-namespace:MeisterWill.WindowsExplorer">
     <Color x:Key="PathViewItemChildNormalColor">#FFF0F0F0</Color>
     <Color x:Key="PathViewItemChildMouseOverColor">#FFC1DCF3</Color>
     <VisualStateGroup x:Key="PathViewItemChildCommonVisualStateGroup" x:Name="CommonStates">

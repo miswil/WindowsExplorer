@@ -5,7 +5,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Test"
-        xmlns:we="clr-namespace:WindowsExplorer;assembly=WindowsExplorer"
+        xmlns:we="http://meister.will.com/windows/explorer"
         mc:Ignorable="d"
         Title="Window1" Height="450" Width="800">
     <Window.DataContext>

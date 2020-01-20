@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WindowsExplorer.Properties
+namespace MeisterWill.WindowsExplorer.Properties
 {
     
     

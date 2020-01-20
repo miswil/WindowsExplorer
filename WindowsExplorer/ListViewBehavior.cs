@@ -10,7 +10,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace WindowsExplorer
+namespace MeisterWill.WindowsExplorer
 {
     public class ListViewBehavior : DependencyObject
     {
