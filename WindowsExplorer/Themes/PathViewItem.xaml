@@ -109,7 +109,10 @@
             <Button x:Name="PART_PathButton"
                     Style="{TemplateBinding PathItemContainerStyle}"
                     Content="{TemplateBinding Header}"
-                    Template="{StaticResource PathButtonTemplate}"/>
+                    Template="{StaticResource PathButtonTemplate}"
+                    Command="{TemplateBinding Command}"
+                    CommandParameter="{TemplateBinding CommandParameter}"
+                    CommandTarget="{TemplateBinding CommandTarget}"/>
             <ToggleButton Name="PART_ExpandToggleButton"
                               Style="{TemplateBinding PathItemChildItemContainerStyle}"
                               IsThreeState="False"

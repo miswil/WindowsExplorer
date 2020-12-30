@@ -34,7 +34,7 @@ namespace MeisterWill.WindowsExplorer
     ///     <MyNamespace:PathViewItem/>
     ///
     /// </summary>
-    public class PathViewItem : HeaderedItemsControl
+    public class PathViewItem : HeaderedItemsControl, ICommandSource
     {
         private ToggleButton expandToggleButton;
         private Button pathButton;
@@ -93,6 +93,38 @@ namespace MeisterWill.WindowsExplorer
         public static readonly DependencyProperty PathItemChildItemContainerStyleProperty =
             DependencyProperty.Register("PathItemChildItemContainerStyle", typeof(Style), typeof(PathViewItem), new PropertyMetadata(null));
         #endregion PathItemChildItemContainerStyleProperty
+
+        #region Command
+        public ICommand Command
+        {
+            get { return (ICommand)GetValue(CommandProperty); }
+            set { SetValue(CommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Command.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CommandProperty =
+            DependencyProperty.Register("Command", typeof(ICommand), typeof(PathViewItem), new PropertyMetadata(null));
+
+        public object CommandParameter
+        {
+            get { return (object)GetValue(CommandParameterProperty); }
+            set { SetValue(CommandParameterProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for CommandParameter.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CommandParameterProperty =
+            DependencyProperty.Register("CommandParameter", typeof(object), typeof(PathViewItem), new PropertyMetadata(null));
+
+        public IInputElement CommandTarget
+        {
+            get { return (IInputElement)GetValue(CommandTargetProperty); }
+            set { SetValue(CommandTargetProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for CommandTarget.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CommandTargetProperty =
+            DependencyProperty.Register("CommandTarget", typeof(IInputElement), typeof(PathViewItem), new PropertyMetadata(null));
+        #endregion Command
         #endregion Properties
 
         #region Events

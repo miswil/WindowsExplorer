@@ -26,6 +26,16 @@
             <we:PathView.ItemContainerStyle>
                 <Style TargetType="we:PathViewItem">
                     <Setter Property="local:Behaviors.PathExpandCommand" Value="{Binding DataContext.ExpandCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                    <Setter Property="Command" Value="{Binding DataContext.SelectCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                    <Setter Property="CommandParameter" Value="{Binding}"/>
+                    <Setter Property="ItemContainerStyle">
+                        <Setter.Value>
+                            <Style TargetType="we:PathViewItemChildItem">
+                                <Setter Property="Command" Value="{Binding DataContext.SelectCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                <Setter Property="CommandParameter" Value="{Binding}"/>
+                            </Style>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
             </we:PathView.ItemContainerStyle>
         </we:PathView>
