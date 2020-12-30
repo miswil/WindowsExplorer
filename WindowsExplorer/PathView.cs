@@ -46,12 +46,15 @@ namespace MeisterWill.WindowsExplorer
         public PathViewState State
         {
             get { return (PathViewState)GetValue(StateProperty); }
-            set { SetValue(StateProperty, value); }
+            set { SetValue(StatePropertyKey, value); }
         }
+
+        private static readonly DependencyPropertyKey StatePropertyKey =
+            DependencyProperty.RegisterReadOnly("State", typeof(PathViewState), typeof(PathView), new PropertyMetadata(PathViewState.Normal));
 
         // Using a DependencyProperty as the backing store for Status.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty StateProperty =
-            DependencyProperty.Register("State", typeof(PathViewState), typeof(PathView), new PropertyMetadata(PathViewState.Normal));
+            StatePropertyKey.DependencyProperty;
 
         public Style PathHistoryStyle
         {
