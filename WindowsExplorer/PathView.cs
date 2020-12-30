@@ -53,15 +53,15 @@ namespace MeisterWill.WindowsExplorer
         public static readonly DependencyProperty StateProperty =
             DependencyProperty.Register("State", typeof(PathViewState), typeof(PathView), new PropertyMetadata(PathViewState.Normal));
 
-        public Style PathsStyle
+        public Style PathHistoryStyle
         {
-            get { return (Style)GetValue(PathsStyleProperty); }
-            set { SetValue(PathsStyleProperty, value); }
+            get { return (Style)GetValue(PathHistoryStyleProperty); }
+            set { SetValue(PathHistoryStyleProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for Path.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty PathsStyleProperty =
-            DependencyProperty.Register("PathsStyle", typeof(Style), typeof(PathView), new PropertyMetadata(null));
+        public static readonly DependencyProperty PathHistoryStyleProperty =
+            DependencyProperty.Register("PathHistoryStyle", typeof(Style), typeof(PathView), new PropertyMetadata(null));
 
         public string Path
         {
@@ -72,14 +72,14 @@ namespace MeisterWill.WindowsExplorer
         public static readonly DependencyProperty PathProperty =
             DependencyProperty.Register("Path", typeof(string), typeof(PathView), new PropertyMetadata(null));
 
-        public IEnumerable Paths
+        public IEnumerable PathHistory
         {
-            get { return (IEnumerable)GetValue(PathsProperty); }
-            set { SetValue(PathsProperty, value); }
+            get { return (IEnumerable)GetValue(PathHistoryProperty); }
+            set { SetValue(PathHistoryProperty, value); }
         }
 
-        public static readonly DependencyProperty PathsProperty =
-            DependencyProperty.Register("Paths", typeof(IEnumerable), typeof(PathView), new PropertyMetadata(null));
+        public static readonly DependencyProperty PathHistoryProperty =
+            DependencyProperty.Register("PathHistory", typeof(IEnumerable), typeof(PathView), new PropertyMetadata(null));
         #endregion Property
         #region Events
         public delegate void SelectedEventHandler(object sender, SelectedEventArgs e);

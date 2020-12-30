@@ -11,7 +11,7 @@
                                             Value="{x:Static Visibility.Hidden}" />
                 </ObjectAnimationUsingKeyFrames>
                 <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)"
-                                                 Storyboard.TargetName="PART_Paths">
+                                                 Storyboard.TargetName="PART_PathHistory">
                     <DiscreteObjectKeyFrame KeyTime="0"
                                             Value="{x:Static Visibility.Visible}" />
                 </ObjectAnimationUsingKeyFrames>
@@ -27,12 +27,12 @@
                             BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
                             <ItemsPresenter x:Name="PART_PathViewItemList"/>
-                            <ComboBox x:Name="PART_Paths" 
+                            <ComboBox x:Name="PART_PathHistory" 
                                       Visibility="Hidden" 
                                       IsEditable="True"
                                       Text="{TemplateBinding Path}"
-                                      ItemsSource="{TemplateBinding Paths}"
-                                      Style="{TemplateBinding PathsStyle}"/>
+                                      ItemsSource="{TemplateBinding PathHistory}"
+                                      Style="{TemplateBinding PathHistoryStyle}"/>
                         </Grid>
                         <VisualStateManager.VisualStateGroups>
                             <StaticResource ResourceKey="PathViewCommonVisualStateGroup"/>
