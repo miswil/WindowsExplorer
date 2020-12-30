@@ -10,15 +10,20 @@ namespace Sample
 {
     class MainViewModel : ViewModelBase
     {
+        private ItemViewModel selectedDirectory;
+        public ItemViewModel SelectedDirectory 
+        {
+            get => this.selectedDirectory;
+            set => this.Set(ref this.selectedDirectory, value);
+        }
         public ObservableCollection<ItemViewModel> Directories { get; }
-        public ObservableCollection<ItemViewModel> Files { get; }
         public ObservableCollection<ItemViewModel> Path { get; }
 
         private ICommand expandCommand;
         public ICommand ExpandCommand =>
             (this.expandCommand ?? (this.expandCommand = new RelayCommand<ItemViewModel>(vm =>
             {
-                vm.GetDirectories();
+                vm.SetChildren();
             })));
 
         private ICommand selectCommand;
@@ -33,7 +38,7 @@ namespace Sample
                 new ObservableCollection<ItemViewModel>(
                     Directory.GetLogicalDrives().Select(
                         d => new ItemViewModel(new DirectoryInfo(d), null)));
-            this.Files = new ObservableCollection<ItemViewModel>();
+            this.SelectedDirectory = this.Directories.FirstOrDefault();
             this.Path = new ObservableCollection<ItemViewModel>();
         }
 
@@ -57,7 +62,7 @@ namespace Sample
                 var dir = dirs.First(d => d.Item.FullName == path[i].Item.FullName);
                 dir.IsExpanded = true;
                 dir.IsSelected = true;
-                dir.GetDirectories();
+                dir.SetChildren();
                 dirs = dir.Directories;
             }
 
@@ -68,20 +73,8 @@ namespace Sample
                 this.Path.Add(dir);
             }
 
-            // operate files
-            this.Files.Clear();
-            try
-            {
-                foreach (var dir in (directory.Item as DirectoryInfo).GetDirectories())
-                {
-                    this.Files.Add(new ItemViewModel(dir, directory));
-                }
-                foreach (var file in (directory.Item as DirectoryInfo).GetFiles())
-                {
-                    this.Files.Add(new ItemViewModel(file, directory));
-                }
-            }
-            catch { }
+            // operate list
+            this.SelectedDirectory = directory;
         }
     }
 }

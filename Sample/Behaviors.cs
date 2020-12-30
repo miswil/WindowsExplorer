@@ -57,6 +57,10 @@ namespace Sample
                         {
                             CommandParameter = treeViewItem.DataContext
                         });
+                        treeViewItem.InputBindings.Add(new KeyBinding(e.NewValue as ICommand, new KeyGesture(Key.Enter))
+                        {
+                            CommandParameter = treeViewItem.DataContext
+                        });
                     }
                 }));
 

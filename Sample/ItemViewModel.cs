@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 
@@ -6,6 +7,8 @@ namespace Sample
 {
     class ItemViewModel : ViewModelBase
     {
+        private bool isChildrenGotten;
+
         private bool isExpanded;
         public bool IsExpanded
         {
@@ -23,28 +26,43 @@ namespace Sample
         public ItemViewModel Parent { get; }
         public FileSystemInfo Item { get; }
         public ObservableCollection<ItemViewModel> Directories { get; }
+        public ObservableCollection<ItemViewModel> Files { get; }
         public ItemViewModel(FileSystemInfo item, ItemViewModel parent)
         {
+            this.isChildrenGotten = false;
             this.Item = item;
             this.Parent = parent;
             this.Directories = new ObservableCollection<ItemViewModel> { null };
+            this.Files = new ObservableCollection<ItemViewModel>();
         }
 
-        public void GetDirectories()
+        public void SetChildren()
         {
+            if (this.isChildrenGotten)
+            {
+                return;
+            }
             try
             {
-                if (this.Directories.Count == 1 && this.Directories[0] == null)
+                var directories = new List<ItemViewModel>();
+                var files = new List<ItemViewModel>();
+                if (this.Item is DirectoryInfo dir)
                 {
-                    this.Directories.Clear();
-                    if (this.Item is DirectoryInfo dir)
+                    foreach (var directory in dir.GetDirectories())
                     {
-                        foreach (var directory in dir.GetDirectories())
-                        {
-                            this.Directories.Add(new ItemViewModel(directory, this));
-                        }
+                        var itemvm = new ItemViewModel(directory, this);
+                        directories.Add(itemvm);
+                        files.Add(itemvm);
+                    }
+                    foreach (var file in dir.GetFiles())
+                    {
+                        files.Add(new ItemViewModel(file, this));
                     }
                 }
+                this.Directories.Clear();
+                directories.ForEach(i => this.Directories.Add(i));
+                files.ForEach(i => this.Files.Add(i));
+                this.isChildrenGotten = true;
             }
             catch { }
         }
