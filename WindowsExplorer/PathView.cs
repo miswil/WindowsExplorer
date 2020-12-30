@@ -97,7 +97,7 @@ namespace MeisterWill.WindowsExplorer
             remove { RemoveHandler(SelectedEvent, value); }
         }
 
-        public delegate void PathCommitEventHandler(object sender, PathTextCommitEventArgs e);
+        public delegate void PathCommitEventHandler(object sender, PathEventArgs e);
 
         public static readonly RoutedEvent PathCommitEvent =
             EventManager.RegisterRoutedEvent("PathCommit", RoutingStrategy.Bubble, typeof(PathCommitEventHandler), typeof(PathView));
@@ -107,6 +107,17 @@ namespace MeisterWill.WindowsExplorer
         {
             add { AddHandler(PathCommitEvent, value); }
             remove { RemoveHandler(PathCommitEvent, value); }
+        }
+
+
+        public static readonly RoutedEvent PathCancelEvent =
+            EventManager.RegisterRoutedEvent("PathCancel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(PathView));
+
+        // Provide CLR accessors for the event
+        public event RoutedEventHandler PathCancel
+        {
+            add { AddHandler(PathCancelEvent, value); }
+            remove { RemoveHandler(PathCancelEvent, value); }
         }
         #endregion Events
 
@@ -265,7 +276,7 @@ namespace MeisterWill.WindowsExplorer
             {
                 this.pathComboBox.ReleaseMouseCapture();
             }
-            this.pathComboBox.Text = this.beforeEditPathText;
+            this.RaisePathCancelEvent();
             this.SetVisualState(PathViewState.Normal);
         }
 
@@ -340,7 +351,7 @@ namespace MeisterWill.WindowsExplorer
                 void pathTextChangedByComboBoxItemSelect(object _s, TextChangedEventArgs _e)
                 {
                     this.pathTextBox.TextChanged -= pathTextChangedByComboBoxItemSelect;
-                    this.RaisePathTextCommitEvent();
+                    this.RaisePathCommitEvent();
                 }
                 // at this point, the text being shown is not the selected text.
                 // TextChanged event should be raised after text is actually changed.
@@ -354,11 +365,11 @@ namespace MeisterWill.WindowsExplorer
             {
                 case Key.Enter:
                     this.SetVisualState(PathViewState.Normal);
-                    this.RaisePathTextCommitEvent();
+                    this.RaisePathCommitEvent();
                     break;
                 case Key.Escape:
                     this.SetVisualState(PathViewState.Normal);
-                    this.pathComboBox.Text = this.beforeEditPathText;
+                    this.RaisePathCancelEvent();
                     break;
                 default:
                     break;
@@ -384,9 +395,14 @@ namespace MeisterWill.WindowsExplorer
             }
         }
 
-        private void RaisePathTextCommitEvent()
+        private void RaisePathCommitEvent()
         {
-            this.RaiseEvent(new PathTextCommitEventArgs(PathCommitEvent) { OldText = this.beforeEditPathText, NewText = this.pathTextBox.Text });
+            this.RaiseEvent(new PathEventArgs(PathCommitEvent) { OldText = this.beforeEditPathText, NewText = this.pathTextBox.Text });
+        }
+
+        private void RaisePathCancelEvent()
+        {
+            this.RaiseEvent(new PathEventArgs(PathCancelEvent) { OldText = this.beforeEditPathText, NewText = this.pathTextBox.Text });
         }
 
         private ContextMenu GetEditableTextBoxContextMenu()
@@ -419,19 +435,19 @@ namespace MeisterWill.WindowsExplorer
         public object Item { get; internal set; }
     }
 
-    public class PathTextCommitEventArgs : RoutedEventArgs
+    public class PathEventArgs : RoutedEventArgs
     {
-        public PathTextCommitEventArgs() : base()
+        public PathEventArgs() : base()
         {
 
         }
 
-        public PathTextCommitEventArgs(RoutedEvent routedEvent) : base(routedEvent)
+        public PathEventArgs(RoutedEvent routedEvent) : base(routedEvent)
         {
 
         }
 
-        public PathTextCommitEventArgs(RoutedEvent routedEvent, object source) : base(routedEvent, source)
+        public PathEventArgs(RoutedEvent routedEvent, object source) : base(routedEvent, source)
         {
 
         }
