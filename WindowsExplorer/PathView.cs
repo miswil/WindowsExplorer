@@ -205,6 +205,7 @@ namespace WindowsExplorer
                 case PathViewState.Expanding:
                     this.State = PathViewState.Normal;
                     this.expandingItem = null;
+                    this.ReleaseMouseCapture();
                     break;
                 case PathViewState.Editing:
                     throw new InvalidOperationException();
