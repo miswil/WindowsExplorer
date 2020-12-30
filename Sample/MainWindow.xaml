@@ -1,0 +1,72 @@
+﻿<Window x:Class="Sample.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:we="http://meister.will.com/windows/explorer"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Sample"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <local:MainViewModel/>
+    </Window.DataContext>
+    <DockPanel>
+        <we:PathView DockPanel.Dock="Top"
+                     ItemsSource="{Binding Path}">
+            <we:PathView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Directories}">
+                    <TextBlock Text="{Binding Item.Name}"/>
+                    <HierarchicalDataTemplate.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Background="Transparent" Text="{Binding Item.Name}"/>
+                        </DataTemplate>
+                    </HierarchicalDataTemplate.ItemTemplate>
+                </HierarchicalDataTemplate>
+            </we:PathView.ItemTemplate>
+            <we:PathView.ItemContainerStyle>
+                <Style TargetType="we:PathViewItem">
+                    <Setter Property="local:Behaviors.PathExpandCommand" Value="{Binding DataContext.ExpandCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                </Style>
+            </we:PathView.ItemContainerStyle>
+        </we:PathView>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="2"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+            <TreeView ItemsSource="{Binding Directories}">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Directories}">
+                        <TextBlock Text="{Binding Item.Name}"/>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="{x:Type TreeViewItem}">
+                        <Setter Property="local:Behaviors.TreeExpandCommand" Value="{Binding DataContext.ExpandCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                        <Setter Property="local:Behaviors.TreeSelectCommand" Value="{Binding DataContext.SelectCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
+                    </Style>
+                </TreeView.ItemContainerStyle>
+            </TreeView>
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch"/>
+            <ListView Grid.Column="2"
+                      ItemsSource="{Binding Files}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Name" 
+                                        DisplayMemberBinding="{Binding Item.Name}"/>
+                        <GridViewColumn Header="LastWriteTime"
+                                        DisplayMemberBinding="{Binding Item.LastWriteTime}"/>
+                    </GridView>
+                </ListView.View>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="local:Behaviors.ListSelectCommand" Value="{Binding DataContext.SelectCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
+        </Grid>
+    </DockPanel>
+</Window>
