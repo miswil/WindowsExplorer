@@ -223,7 +223,7 @@ namespace WindowsExplorer
                     // do nothing
                     break;
                 case PathViewState.Expanding:
-                    if (this.expandingItem != null)
+                    if (this.expandingItem != item)
                     {
                         this.expandingItem.IsExpanded = false;
                     }
