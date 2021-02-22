@@ -30,7 +30,7 @@
                             <ComboBox x:Name="PART_PathHistory" 
                                       Visibility="Hidden" 
                                       IsEditable="True"
-                                      Text="{TemplateBinding Path}"
+                                      Text="{Binding Path, RelativeSource={RelativeSource TemplatedParent}}"
                                       ItemsSource="{TemplateBinding PathHistory}"
                                       Style="{TemplateBinding PathHistoryStyle}"/>
                         </Grid>
