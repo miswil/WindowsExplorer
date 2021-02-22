@@ -145,7 +145,7 @@ namespace MeisterWill.WindowsExplorer
                 this.pathComboBox.Unloaded -= this.PathComboBox_Unloaded;
                 this.pathComboBox.Loaded -= this.PathComboBox_Loaded;
             }
-            this.pathComboBox = this.Template.FindName("PART_Paths", this) as ComboBox;
+            this.pathComboBox = this.Template.FindName("PART_PathHistory", this) as ComboBox;
             if (this.pathComboBox != null)
             {
                 this.pathComboBox.Loaded += this.PathComboBox_Loaded;
