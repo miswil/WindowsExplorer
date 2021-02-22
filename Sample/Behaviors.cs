@@ -114,6 +114,55 @@ namespace Sample
                     }
                 }));
 
+        public static ICommand GetPathTextCommitCommand(DependencyObject obj)
+        {
+            return (ICommand)obj.GetValue(PathTextCommitCommandProperty);
+        }
+
+        public static void SetPathTextCommitCommand(DependencyObject obj, ICommand value)
+        {
+            obj.SetValue(PathTextCommitCommandProperty, value);
+        }
+
+        // Using a DependencyProperty as the backing store for PathTextCommit.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PathTextCommitCommandProperty =
+            DependencyProperty.RegisterAttached("PathTextCommitCommand", typeof(ICommand), typeof(Behaviors), new PropertyMetadata(null,
+                (sender, e) =>
+                {
+                    if (sender is PathView pathView)
+                    {
+                        pathView.PathCommit += (_s, _e) =>
+                        {
+                            (e.NewValue as ICommand).Execute(null);
+                        };
+                    }
+                }));
+
+
+
+        public static ICommand GetPathTextCancelCommand(DependencyObject obj)
+        {
+            return (ICommand)obj.GetValue(PathTextCancelCommandProperty);
+        }
+
+        public static void SetPathTextCancelCommand(DependencyObject obj, ICommand value)
+        {
+            obj.SetValue(PathTextCancelCommandProperty, value);
+        }
+
+        // Using a DependencyProperty as the backing store for PathTextCancelCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PathTextCancelCommandProperty =
+            DependencyProperty.RegisterAttached("PathTextCancelCommand", typeof(ICommand), typeof(Behaviors), new PropertyMetadata(null, (sender, e) =>
+            {
+                if (sender is PathView pathView)
+                {
+                    pathView.PathCancel += (_s, _e) =>
+                    {
+                        (e.NewValue as ICommand).Execute(null);
+                    };
+                }
+            }));
+
 
     }
 }

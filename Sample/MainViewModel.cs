@@ -19,6 +19,13 @@ namespace Sample
         public ObservableCollection<ItemViewModel> Directories { get; }
         public ObservableCollection<ItemViewModel> Path { get; }
 
+        private string pathText;
+        public string PathText
+        {
+            get => this.pathText;
+            set => this.Set(ref this.pathText, value);
+        }
+
         private ICommand expandCommand;
         public ICommand ExpandCommand =>
             (this.expandCommand ?? (this.expandCommand = new RelayCommand<ItemViewModel>(vm =>
@@ -29,8 +36,33 @@ namespace Sample
         private ICommand selectCommand;
         public ICommand SelectCommand => this.selectCommand ?? (this.selectCommand = new RelayCommand<ItemViewModel>(vm =>
         {
-            this.Navigate(vm);
+            if (vm.Item is DirectoryInfo directoryInfo)
+            {
+                this.Navigate(directoryInfo);
+            }
         }));
+
+        private ICommand pathTextCommitCommand;
+        public ICommand PathTextCommitCommand =>
+            (this.pathTextCommitCommand ?? (this.pathTextCommitCommand = new RelayCommand(() =>
+            {
+                var dir = new DirectoryInfo(this.PathText);
+                if (dir.Exists)
+                {
+                    this.Navigate(dir);
+                }
+                else
+                {
+                    this.PathText = this.SelectedDirectory.Item.FullName;
+                }
+            })));
+
+        private ICommand pathTextCancelCommand;
+        public ICommand PathTextCancelCommand =>
+            (this.pathTextCancelCommand ?? (this.pathTextCancelCommand = new RelayCommand(() =>
+            {
+                this.PathText = this.SelectedDirectory.Item.FullName;
+            })));
 
         public MainViewModel()
         {
@@ -42,28 +74,22 @@ namespace Sample
             this.Path = new ObservableCollection<ItemViewModel>();
         }
 
-        private void Navigate(ItemViewModel directory)
+        private void Navigate(DirectoryInfo directory)
         {
-            if (!(directory.Item is DirectoryInfo))
-            {
-                return;
-            }
+            var fullDirectories = this.GetFullDirectoryInfo(directory);
+
             var path = new List<ItemViewModel>();
-            for (ItemViewModel dir = directory; dir != null; dir = dir.Parent)
-            {
-                path.Add(dir);
-            }
-            path.Reverse();
 
             // operate tree
-            var dirs = this.Directories;
-            for (int i = 0; i < path.Count; ++i)
+            var dirItems = this.Directories;
+            foreach (var dir in fullDirectories)
             {
-                var dir = dirs.First(d => d.Item.FullName == path[i].Item.FullName);
-                dir.IsExpanded = true;
-                dir.IsSelected = true;
-                dir.SetChildren();
-                dirs = dir.Directories;
+                var dirItem  = dirItems.First(d => d.Item.FullName == dir.FullName);
+                path.Add(dirItem);
+                dirItem.IsExpanded = true;
+                dirItem.IsSelected = true;
+                dirItem.SetChildren();
+                dirItems = dirItem.Directories;
             }
 
             // operate path
@@ -72,9 +98,23 @@ namespace Sample
             {
                 this.Path.Add(dir);
             }
+            this.PathText = directory.FullName;
 
             // operate list
-            this.SelectedDirectory = directory;
+            this.SelectedDirectory = path.Last(); ;
+        }
+
+        List<DirectoryInfo> GetFullDirectoryInfo(DirectoryInfo directory)
+        {
+            var ret = new List<DirectoryInfo>();
+            var dir = directory;
+            while (dir != null)
+            {
+                ret.Add(dir);
+                dir = dir.Parent;
+            }
+            ret.Reverse();
+            return ret;
         }
     }
 }

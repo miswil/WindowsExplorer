@@ -12,7 +12,10 @@
     </Window.DataContext>
     <DockPanel>
         <we:PathView DockPanel.Dock="Top"
-                     ItemsSource="{Binding Path}">
+                     ItemsSource="{Binding Path}"
+                     Path="{Binding PathText}"
+                     local:Behaviors.PathTextCommitCommand="{Binding PathTextCommitCommand}"
+                     local:Behaviors.PathTextCancelCommand="{Binding PathTextCancelCommand}">
             <we:PathView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Directories}">
                     <TextBlock Text="{Binding Item.Name}"/>
