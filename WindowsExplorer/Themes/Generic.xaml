@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
     <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/WindowsExplorer;component/Themes/ExpandToggleButton.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/WindowsExplorer;component/Themes/PathViewItemChildItem.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/WindowsExplorer;component/Themes/PathViewItem.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/WindowsExplorer;component/Themes/PathView.xaml"/>
