@@ -48,22 +48,25 @@
                 <ColumnDefinition Width="2"/>
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
-            <TreeView ItemsSource="{Binding Directories}">
-                <TreeView.ItemTemplate>
+            <we:TreeListView ItemsSource="{Binding Directories}">
+                <we:TreeListView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Directories}">
-                        <TextBlock Text="{Binding Item.Name}"/>
+                        <StackPanel Orientation="Horizontal">
+                            <we:TreeListViewExpander/>
+                            <TextBlock Text="{Binding Item.Name}"/>
+                        </StackPanel>
                     </HierarchicalDataTemplate>
-                </TreeView.ItemTemplate>
-                <TreeView.ItemContainerStyle>
+                </we:TreeListView.ItemTemplate>
+                <we:TreeListView.ItemContainerStyle>
                     <Style TargetType="{x:Type TreeViewItem}">
                         <Setter Property="local:Behaviors.TreeExpandCommand" Value="{Binding DataContext.ExpandCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
                         <Setter Property="local:Behaviors.TreeSelectCommand" Value="{Binding DataContext.SelectCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
                         <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
                         <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
                     </Style>
-                </TreeView.ItemContainerStyle>
-            </TreeView>
-            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch"/>
+                </we:TreeListView.ItemContainerStyle>
+            </we:TreeListView>
+            <GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Stretch"/>
             <ListView Grid.Column="2"
                       ItemsSource="{Binding SelectedDirectory.Files}"
                       we:ListViewBehavior.DragMultiSelectEnabled="True"
