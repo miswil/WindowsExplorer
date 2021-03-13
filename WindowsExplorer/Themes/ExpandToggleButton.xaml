@@ -17,7 +17,7 @@
                 <Path.RenderTransform>
                     <RotateTransform x:Name="ExpandRotation"
                                      Angle="0"
-                                     CenterX="2.5" CenterY="3"/>
+                                     CenterX="1.5" CenterY="3"/>
                 </Path.RenderTransform>
             </Path>
             <VisualStateManager.VisualStateGroups>
