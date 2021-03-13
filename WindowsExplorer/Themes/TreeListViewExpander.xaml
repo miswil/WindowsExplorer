@@ -10,5 +10,10 @@
         <Setter Property="VerticalAlignment" Value="Stretch"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="Depth" Value="{Binding Depth, RelativeSource={RelativeSource AncestorType=local:TreeListViewItem}}"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding (TreeViewItem.HasItems), RelativeSource={RelativeSource AncestorType=local:TreeListViewItem}}" Value="false">
+                <Setter Property="Visibility" Value="Hidden"/>
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 </ResourceDictionary>
