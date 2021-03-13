@@ -60,7 +60,7 @@ namespace MeisterWill.WindowsExplorer
                 if (d is TreeListViewExpander expander)
                 {
                     var margin = expander.Margin;
-                    margin.Left = expander.ActualWidth * expander.Depth + 10;// extra margin
+                    margin.Left += expander.ActualWidth * expander.Depth;
                     expander.Margin = margin;
                 }
             }));

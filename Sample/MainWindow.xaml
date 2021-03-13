@@ -52,7 +52,7 @@
                 <we:TreeListView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Directories}">
                         <StackPanel Orientation="Horizontal">
-                            <we:TreeListViewExpander/>
+                            <we:TreeListViewExpander Margin="3,0"/>
                             <TextBlock Text="{Binding Item.Name}"/>
                         </StackPanel>
                     </HierarchicalDataTemplate>
