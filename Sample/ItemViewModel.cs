@@ -7,7 +7,7 @@ namespace Sample
 {
     class ItemViewModel : ViewModelBase
     {
-        private bool isChildrenGotten;
+        private bool childrenGotten;
 
         private bool isExpanded;
         public bool IsExpanded
@@ -29,7 +29,7 @@ namespace Sample
         public ObservableCollection<ItemViewModel> Files { get; }
         public ItemViewModel(FileSystemInfo item, ItemViewModel parent)
         {
-            this.isChildrenGotten = false;
+            this.childrenGotten = false;
             this.Item = item;
             this.Parent = parent;
             this.Directories = new ObservableCollection<ItemViewModel> { null };
@@ -38,12 +38,13 @@ namespace Sample
 
         public void SetChildren()
         {
-            if (this.isChildrenGotten)
+            if (this.childrenGotten)
             {
                 return;
             }
             try
             {
+                this.Directories.Clear();
                 var directories = new List<ItemViewModel>();
                 var files = new List<ItemViewModel>();
                 if (this.Item is DirectoryInfo dir)
@@ -59,12 +60,11 @@ namespace Sample
                         files.Add(new ItemViewModel(file, this));
                     }
                 }
-                this.Directories.Clear();
                 directories.ForEach(i => this.Directories.Add(i));
                 files.ForEach(i => this.Files.Add(i));
-                this.isChildrenGotten = true;
+                this.childrenGotten = true;
             }
-            catch { }
+            catch{ }
         }
     }
 }
