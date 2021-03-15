@@ -8,81 +8,98 @@
     <Color x:Key="ItemSelectedInactiveColor">LightGray</Color>
     <Color x:Key="ItemDisabledColor">Gray</Color>
     <!--endregion-->
-    <VisualStateGroup x:Key="TreeListViewItemVisualStateGroupCommonStatesKey" x:Name="CommonStates">
-        <VisualState x:Name="Normal"/>
-        <VisualState x:Name="Disabled">
-            <Storyboard>
-                <ColorAnimation Duration="0"
-                                To="{StaticResource ItemDisabledColor}"
-                                Storyboard.TargetName="PART_Header"
-                                Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"/>
-                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)"
-                                               Storyboard.TargetName="PART_Children">
-                    <DiscreteObjectKeyFrame KeyTime="0"
-                                            Value="{x:Static Visibility.Collapsed}" />
-                </ObjectAnimationUsingKeyFrames>
-            </Storyboard>
-        </VisualState>
-        <VisualState x:Name="MouseOver">
-            <Storyboard>
-                <ColorAnimation Duration="0"
-                                To="{StaticResource ItemMouseOverColor}"
-                                Storyboard.TargetName="PART_Header"
-                                Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"/>
-            </Storyboard>
-        </VisualState>
-    </VisualStateGroup>
-    <VisualStateGroup x:Key="TreeListViewItemVisualStateGroupExpansionStatesKey" x:Name="ExpansionStates">
-        <VisualState x:Name="Collapsed"/>
-        <VisualState x:Name="Expanded">
-            <Storyboard>
-                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_Children"
-                                               Storyboard.TargetProperty="(UIElement.Visibility)">
-                    <DiscreteObjectKeyFrame KeyTime="0"
-                                            Value="{x:Static Visibility.Visible}"/>
-                </ObjectAnimationUsingKeyFrames>
-            </Storyboard>
-        </VisualState>
-    </VisualStateGroup>
-    <VisualStateGroup x:Key="TreeListViewItemVisualStateSelectionStatesKey" x:Name="SelectionStates">
-        <VisualState x:Name="Unselected"/>
-        <VisualState x:Name="Selected">
-            <Storyboard>
-                <ColorAnimation Duration="0"
-                                To="{StaticResource ItemSelectedColor}"
-                                Storyboard.TargetName="PART_Header"
-                                Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"/>
-            </Storyboard>
-        </VisualState>
-        <VisualState x:Name="SelectedInactive">
-            <Storyboard>
-                <ColorAnimation Duration="0"
-                                To="{StaticResource ItemSelectedInactiveColor}"
-                                Storyboard.TargetName="PART_Header"
-                                Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"/>
-            </Storyboard>
-        </VisualState>
-    </VisualStateGroup>
+    <Style x:Key="headerBorderStyleKey" TargetType="Border">
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="Background" Value="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}"/>
+        <Setter Property="BorderBrush" Value="{Binding BorderBrush, RelativeSource={RelativeSource TemplatedParent}}"/>
+        <Setter Property="BorderThickness" Value="{Binding BorderThickness, RelativeSource={RelativeSource TemplatedParent}}"/>
+        <Setter Property="Padding" Value="{Binding Padding, RelativeSource={RelativeSource TemplatedParent}}"/>
+        <Style.Triggers>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent}}" Value="false"/>
+                    <Condition Binding="{Binding (Border.IsMouseOver), RelativeSource={RelativeSource Self}}" Value="true"/>
+                </MultiDataTrigger.Conditions>
+                <MultiDataTrigger.Setters>
+                    <Setter Property="Background" >
+                        <Setter.Value>
+                            <SolidColorBrush Color="{StaticResource ItemMouseOverColor}"/>
+                        </Setter.Value>
+                    </Setter>
+                </MultiDataTrigger.Setters>
+            </MultiDataTrigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent}}" Value="true"/>
+                    <Condition Binding="{Binding IsFocused, RelativeSource={RelativeSource TemplatedParent}}" Value="true"/>
+                </MultiDataTrigger.Conditions>
+                <MultiDataTrigger.Setters>
+                    <Setter Property="Background" >
+                        <Setter.Value>
+                            <SolidColorBrush Color="{StaticResource ItemSelectedColor}"/>
+                        </Setter.Value>
+                    </Setter>
+                </MultiDataTrigger.Setters>
+            </MultiDataTrigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent}}" Value="true"/>
+                    <Condition Binding="{Binding IsFocused, RelativeSource={RelativeSource TemplatedParent}}" Value="false"/>
+                </MultiDataTrigger.Conditions>
+                <MultiDataTrigger.Setters>
+                    <Setter Property="Background" >
+                        <Setter.Value>
+                            <SolidColorBrush Color="{StaticResource ItemSelectedInactiveColor}"/>
+                        </Setter.Value>
+                    </Setter>
+                </MultiDataTrigger.Setters>
+            </MultiDataTrigger>
+        </Style.Triggers>
+    </Style>
+    <ControlTemplate x:Key="TreeListViewItemTemplateKey" TargetType="local:TreeListViewItem">
+        <VirtualizingStackPanel>
+            <Border Style="{StaticResource headerBorderStyleKey}"
+                    x:Name="headBorder">
+                <ContentPresenter x:Name="PART_Header"
+                                  Focusable="False"
+                                  ContentSource="Header"/>
+            </Border>
+            <ItemsPresenter x:Name="PART_Children"
+                            Visibility="Collapsed"/>
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Disabled">
+                        <Storyboard>
+                            <ColorAnimation Duration="0"
+                                            To="{StaticResource ItemDisabledColor}"
+                                            Storyboard.TargetName="headBorder"
+                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"/>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)"
+                                                           Storyboard.TargetName="PART_Children">
+                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                        Value="{x:Static Visibility.Collapsed}" />
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+                <VisualStateGroup Name="ExpansionStates">
+                    <VisualState x:Name="Expanded">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_Children"
+                                                           Storyboard.TargetProperty="(UIElement.Visibility)">
+                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                        Value="{x:Static Visibility.Visible}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="Collapsed"/>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+        </VirtualizingStackPanel>
+    </ControlTemplate>
     <Style TargetType="{x:Type local:TreeListViewItem}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="local:TreeListViewItem">
-                    <VirtualizingStackPanel>
-                        <Border HorizontalAlignment="Stretch"
-                                Background="Transparent"
-                                x:Name="PART_Header">
-                            <ContentPresenter ContentSource="Header"/>
-                        </Border>
-                        <ItemsPresenter x:Name="PART_Children"
-                                        Visibility="Collapsed"/>
-                        <VisualStateManager.VisualStateGroups>
-                            <StaticResource ResourceKey="TreeListViewItemVisualStateGroupCommonStatesKey"/>
-                            <StaticResource ResourceKey="TreeListViewItemVisualStateGroupExpansionStatesKey"/>
-                            <StaticResource ResourceKey="TreeListViewItemVisualStateSelectionStatesKey"/>
-                        </VisualStateManager.VisualStateGroups>
-                    </VirtualizingStackPanel>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template" Value="{StaticResource TreeListViewItemTemplateKey}"/>
     </Style>
 </ResourceDictionary>
