@@ -82,6 +82,8 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GridTreeListView.cs" />
+    <Compile Include="GridTreeListViewItem.cs" />
     <Compile Include="PathView.cs" />
     <Compile Include="PathViewItem.cs" />
     <Compile Include="PathViewItemChildItem.cs" />

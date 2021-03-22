@@ -102,4 +102,50 @@
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Template" Value="{StaticResource TreeListViewItemTemplateKey}"/>
     </Style>
+    <ControlTemplate x:Key="GridTreeListViewItemTemplateKey" TargetType="local:GridTreeListViewItem">
+        <VirtualizingStackPanel>
+            <Border Style="{StaticResource headerBorderStyleKey}"
+                    x:Name="headBorder">
+                <GridViewRowPresenter x:Name="PART_Header"
+                                      Content="{TemplateBinding Header}"
+                                      Columns="{Binding Columns, RelativeSource={RelativeSource AncestorType=local:GridTreeListView}}"/>
+            </Border>
+            <ItemsPresenter x:Name="PART_Children"
+                            Visibility="Collapsed"/>
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Disabled">
+                        <Storyboard>
+                            <ColorAnimation Duration="0"
+                                            To="{StaticResource ItemDisabledColor}"
+                                            Storyboard.TargetName="headBorder"
+                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"/>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)"
+                                                           Storyboard.TargetName="PART_Children">
+                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                        Value="{x:Static Visibility.Collapsed}" />
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+                <VisualStateGroup Name="ExpansionStates">
+                    <VisualState x:Name="Expanded">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_Children"
+                                                           Storyboard.TargetProperty="(UIElement.Visibility)">
+                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                        Value="{x:Static Visibility.Visible}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="Collapsed"/>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+        </VirtualizingStackPanel>
+    </ControlTemplate>
+    <Style TargetType="{x:Type local:GridTreeListViewItem}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template" Value="{StaticResource GridTreeListViewItemTemplateKey}"/>
+    </Style>
 </ResourceDictionary>
